@@ -52,7 +52,9 @@
     </div>
 
     <div class="main-content">
+        <div class="container">
         <?php echo $content; ?>
+        </div>
     </div>
 </body>
 
