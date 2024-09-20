@@ -1,0 +1,96 @@
+<?php
+session_start();
+if ($_SESSION['role'] != 'user') {
+    header("Location: ../../login.php");
+    exit;
+}
+
+include '../../db/db.php';
+
+// Obtener el ID del usuario (asumido que está almacenado en la sesión)
+$usuario_id = $_SESSION['id'];
+
+// Verificar si se ha enviado el ID de la vacante
+$vacante_id = isset($_GET['vacante_id']) ? intval($_GET['vacante_id']) : 0;
+
+// Verificar si se ha enviado el formulario
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nombre = $_POST['nombre'];
+    $email = $_POST['email'];
+    $telefono = $_POST['telefono'];
+    $carrera = $_POST['carrera']; // Nuevo campo para carrera
+    $anos_experiencia = isset($_POST['anos_experiencia']) ? intval($_POST['anos_experiencia']) : 0; // Nuevo campo para años de experiencia
+    $cv = $_FILES['cv']['tmp_name'];
+    $cv_error = $_FILES['cv']['error'];
+
+    if ($cv_error === UPLOAD_ERR_OK) {
+        $cvContent = file_get_contents($cv); // Leer el contenido del archivo
+
+        // Guardar los datos de la aplicación en la base de datos, incluyendo el contenido del CV
+        $sql = "INSERT INTO aplicaciones (vacante_id, usuario_id, nombre, email, telefono, carrera, anos_experiencia, prueba_tecnica) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('iissssis', $vacante_id, $usuario_id, $nombre, $email, $telefono, $carrera, $anos_experiencia, $cvContent);
+
+        if ($stmt->execute()) {
+            $message = "Aplicación enviada exitosamente.";
+        } else {
+            $message = "Error al enviar la aplicación: " . $stmt->error;
+        }
+    } else {
+        $message = "Error al cargar el archivo: " . $cv_error;
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Aplicar a Vacante</title>
+    <link rel="stylesheet" href="../path/to/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Aplicar a Vacante</h1>
+        
+        <?php if (isset($message)) { echo "<div class='alert alert-info'>$message</div>"; } ?>
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre:</label>
+                <input type="text" name="nombre" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono:</label>
+                <input type="text" name="telefono" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="carrera" class="form-label">Carrera:</label>
+                <input type="text" name="carrera" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="anos_experiencia" class="form-label">Años de Experiencia:</label>
+                <input type="number" name="anos_experiencia" class="form-control" required min="0">
+            </div>
+            <div class="mb-3">
+                <label for="cv" class="form-label">CV (PDF):</label>
+                <input type="file" name="cv" class="form-control" accept=".pdf" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar Aplicación</button>
+        </form>
+        
+        <br>
+        <a href="usuario_vacantes.php" class="btn btn-secondary">Volver a Buscar Vacantes</a>
+    </div>
+</body>
+</html>
+<?php
+$content = ob_get_clean();
+include 'user_layout.php'; // Utiliza un layout específico para los usuarios, si existe
+?>
