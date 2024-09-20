@@ -44,14 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Aplicar a Vacante</title>
-    <link rel="stylesheet" href="../path/to/bootstrap.min.css">
-</head>
-<body>
+
     <div class="container">
         <h1>Aplicar a Vacante</h1>
         
@@ -88,8 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <br>
         <a href="usuario_vacantes.php" class="btn btn-secondary">Volver a Buscar Vacantes</a>
     </div>
-</body>
-</html>
 <?php
 $content = ob_get_clean();
 include 'user_layout.php'; // Utiliza un layout específico para los usuarios, si existe
