@@ -29,13 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Crear Vacante</title>
-</head>
-<body>
+<div class="container">
     <h1>Crear Nueva Vacante</h1>
     <form method="POST" action="">
         <label for="nombre">Nombre:</label><br>
@@ -74,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <br>
     <a href="admin.php">Volver al Panel de Admin</a>
-</body>
-</html>
+</div>
+
 <?php
 $content = ob_get_clean();
 include 'admin_layout.php';

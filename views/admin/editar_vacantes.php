@@ -27,14 +27,7 @@ if (isset($id)) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Vacante</title>
-</head>
-<body>
-    <h1>Editar Vacante</h1>
+<div class="container">
 
     <?php if ($vacante_seleccionada) { ?>
     <!-- Formulario para editar los datos de la vacante -->
@@ -45,7 +38,8 @@ if (isset($id)) {
         <input type="text" name="nombre" value="<?php echo $vacante_seleccionada['nombre']; ?>" required><br><br>
 
         <label for="departamento">Departamento:</label><br>
-        <input type="text" name="departamento" value="<?php echo $vacante_seleccionada['departamento']; ?>" required><br><br>
+        <input type="text" name="departamento" value="<?php echo $vacante_seleccionada['departamento']; ?>"
+            required><br><br>
 
         <label for="numero_id">Número ID:</label><br>
         <input type="text" name="numero_id" value="<?php echo $vacante_seleccionada['numero_id']; ?>" required><br><br>
@@ -57,10 +51,12 @@ if (isset($id)) {
         <textarea name="perfil" rows="5" required><?php echo $vacante_seleccionada['perfil']; ?></textarea><br><br>
 
         <label for="descripcion">Descripción:</label><br>
-        <textarea name="descripcion" rows="5" required><?php echo $vacante_seleccionada['descripcion']; ?></textarea><br><br>
+        <textarea name="descripcion" rows="5"
+            required><?php echo $vacante_seleccionada['descripcion']; ?></textarea><br><br>
 
         <label for="requisitos">Requisitos:</label><br>
-        <textarea name="requisitos" rows="5" required><?php echo $vacante_seleccionada['requisitos']; ?></textarea><br><br>
+        <textarea name="requisitos" rows="5"
+            required><?php echo $vacante_seleccionada['requisitos']; ?></textarea><br><br>
 
         <label for="foto">URL de la Foto:</label><br>
         <input type="text" name="foto" value="<?php echo $vacante_seleccionada['foto']; ?>" required><br><br>
@@ -73,8 +69,7 @@ if (isset($id)) {
 
     <br>
     <a href="lista_vacantes.php">Volver a la Lista de Vacantes</a>
-</body>
-</html>
+</div>
 <?php
 $content = ob_get_clean();
 include 'admin_layout.php';

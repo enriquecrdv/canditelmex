@@ -117,11 +117,11 @@ ob_start();
                 <select name="departamento" class="form-select">
                     <option value="">Todos los Departamentos</option>
                     <?php while ($row = $result_departamentos->fetch_assoc()) { ?>
-                        <option value="<?php echo htmlspecialchars($row['departamento']); ?>" <?php if
+                    <option value="<?php echo htmlspecialchars($row['departamento']); ?>" <?php if
                            ($row['departamento'] == $selected_departamento)
                                echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($row['departamento']); ?>
-                        </option>
+                        <?php echo htmlspecialchars($row['departamento']); ?>
+                    </option>
                     <?php } ?>
                 </select>
             </div>
@@ -154,52 +154,52 @@ ob_start();
         </thead>
         <tbody>
             <?php while ($vacante = $result->fetch_assoc()) { ?>
-                <tr class="<?php echo $vacante['destacada'] == '1' ? 'table-success' : ''; ?>">
-                    <td><?php echo $vacante['id']; ?></td>
-                    <td><?php echo $vacante['nombre']; ?></td>
-                    <td><?php echo $vacante['departamento']; ?></td>
-                    <td><?php echo $vacante['numero_id']; ?></td>
-                    <td><?php echo $vacante['fecha']; ?></td>
-                    <td><?php echo $vacante['perfil']; ?></td>
-                    <td><?php echo $vacante['descripcion']; ?></td>
-                    <td><?php echo $vacante['requisitos']; ?></td>
-                    <td><img src="<?php echo $vacante['foto']; ?>" alt="Foto de la vacante" width="100"></td>
-                    <td><?php echo ucfirst($vacante['estado']); ?></td>
-                    <td><?php echo ucfirst($vacante['tipo']); ?></td>
-                    <td>
-                        <?php echo $vacante['seleccionados']; ?>/<?php echo $vacante['total_postulantes']; ?>
-                        <!-- Mostrar los seleccionados/postulantes -->
-                    </td>
-                    <td>
-                        <a class="btn btn-primary btn-sm"
-                            href="editar_vacantes.php?vacante_id=<?php echo $vacante['id']; ?>">Editar</a>
-                        <a class="btn btn-danger btn-sm" href="lista_vacantes.php?delete_id=<?php echo $vacante['id']; ?>"
-                            onclick="return confirm('¿Estás seguro de que deseas eliminar esta vacante?');">Eliminar</a>
-                        <a class="btn btn-warning btn-sm"
-                            href="lista_vacantes.php?update_id=<?php echo $vacante['id']; ?>&current_status=<?php echo $vacante['estado']; ?>">
-                            <?php echo $vacante['estado'] == 'abierta' ? 'Cerrar' : 'Abrir'; ?>
-                        </a>
-                        <a class="btn btn-success btn-sm"
-                            href="lista_vacantes.php?highlight_id=<?php echo $vacante['id']; ?>&current_highlight=<?php echo $vacante['destacada']; ?>">
-                            <?php echo $vacante['destacada'] == '1' ? 'Quitar Destacar' : 'Destacar'; ?>
-                        </a>
-                        <a class="btn btn-info btn-sm"
-                            href="ver_aplicaciones.php?vacante_id=<?php echo $vacante['id']; ?>">Ver Aplicaciones</a>
+            <tr class="<?php echo $vacante['destacada'] == '1' ? 'table-success' : ''; ?>">
+                <td><?php echo $vacante['id']; ?></td>
+                <td><?php echo $vacante['nombre']; ?></td>
+                <td><?php echo $vacante['departamento']; ?></td>
+                <td><?php echo $vacante['numero_id']; ?></td>
+                <td><?php echo $vacante['fecha']; ?></td>
+                <td><?php echo $vacante['perfil']; ?></td>
+                <td><?php echo $vacante['descripcion']; ?></td>
+                <td><?php echo $vacante['requisitos']; ?></td>
+                <td><img src="<?php echo $vacante['foto']; ?>" alt="Foto de la vacante" width="100"></td>
+                <td><?php echo ucfirst($vacante['estado']); ?></td>
+                <td><?php echo ucfirst($vacante['tipo']); ?></td>
+                <td>
+                    <?php echo $vacante['seleccionados']; ?>/<?php echo $vacante['total_postulantes']; ?>
+                    <!-- Mostrar los seleccionados/postulantes -->
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                        href="editar_vacantes.php?vacante_id=<?php echo $vacante['id']; ?>">Editar</a>
+                    <a class="btn btn-danger btn-sm" href="lista_vacantes.php?delete_id=<?php echo $vacante['id']; ?>"
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta vacante?');">Eliminar</a>
+                    <a class="btn btn-warning btn-sm"
+                        href="lista_vacantes.php?update_id=<?php echo $vacante['id']; ?>&current_status=<?php echo $vacante['estado']; ?>">
+                        <?php echo $vacante['estado'] == 'abierta' ? 'Cerrar' : 'Abrir'; ?>
+                    </a>
+                    <a class="btn btn-success btn-sm"
+                        href="lista_vacantes.php?highlight_id=<?php echo $vacante['id']; ?>&current_highlight=<?php echo $vacante['destacada']; ?>">
+                        <?php echo $vacante['destacada'] == '1' ? 'Quitar Destacar' : 'Destacar'; ?>
+                    </a>
+                    <a class="btn btn-info btn-sm"
+                        href="ver_aplicaciones.php?vacante_id=<?php echo $vacante['id']; ?>">Ver Aplicaciones</a>
 
-                        <!-- Botón para compartir en Twitter -->
-                        <a class="btn btn-secondary btn-sm" target="_blank"
-                            href="https://twitter.com/intent/tweet?text=<?php echo urlencode('¡Mira esta vacante: ' . $vacante['nombre'] . '!'); ?>&url=<?php echo urlencode('https://tusitio.com/detalle_vacante.php?vacante_id=' . $vacante['id']); ?>">
-                            Compartir en Twitter
-                        </a>
-                        <a class="btn btn-dark btn-sm"
-                            href="lista_vacantes.php?release_id=<?php echo $vacante['id']; ?>&current_type=<?php echo $vacante['tipo']; ?>">
-                            <?php echo $vacante['tipo'] == 'interno' ? 'Liberar' : 'Hacer Interna'; ?>
-                        </a>
+                    <!-- Botón para compartir en Twitter -->
+                    <a class="btn btn-secondary btn-sm" target="_blank"
+                        href="https://twitter.com/intent/tweet?text=<?php echo urlencode('¡Mira esta vacante: ' . $vacante['nombre'] . '!'); ?>&url=<?php echo urlencode('https://tusitio.com/detalle_vacante.php?vacante_id=' . $vacante['id']); ?>">
+                        Compartir en Twitter
+                    </a>
+                    <a class="btn btn-dark btn-sm"
+                        href="lista_vacantes.php?release_id=<?php echo $vacante['id']; ?>&current_type=<?php echo $vacante['tipo']; ?>">
+                        <?php echo $vacante['tipo'] == 'interno' ? 'Liberar' : 'Hacer Interna'; ?>
+                    </a>
 
-                    </td>
+                </td>
 
 
-                </tr>
+            </tr>
             <?php } ?>
         </tbody>
     </table>
