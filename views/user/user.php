@@ -12,5 +12,5 @@ if ($_SESSION['role'] != 'user') {
     </div>
 <?php
 $content = ob_get_clean();
-include 'user_layout.php'; // Utiliza un layout específico para los usuarios, si existe
+include 'user_layout.php';
 ?>

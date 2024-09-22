@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre = $_POST['nombre'];
     $departamento = $_POST['departamento'];
     $numero_id = $_POST['numero_id'];
-    $fecha = $_POST['fecha'];
     $perfil = $_POST['perfil'];
     $descripcion = $_POST['descripcion'];
     $requisitos = $_POST['requisitos'];
@@ -19,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $prioridad = $_POST['prioridad'];
 
     $sql = "INSERT INTO vacantes (nombre, departamento, numero_id, fecha, perfil, descripcion, requisitos, foto, prioridad) 
-            VALUES ('$nombre', '$departamento', '$numero_id', '$fecha', '$perfil', '$descripcion', '$requisitos', '$foto', '$prioridad')";
-
+         VALUES ('$nombre', '$departamento', '$numero_id', CURDATE(), '$perfil', '$descripcion', '$requisitos', '$foto', '$prioridad')";
+         
     if ($conn->query($sql) === TRUE) {
         echo "Vacante creada exitosamente.";
     } else {
@@ -41,9 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <label for="numero_id">Número ID:</label><br>
         <input type="text" name="numero_id" required><br><br>
 
-        <label for="fecha">Fecha:</label><br>
-        <input type="date" name="fecha" required><br><br>
-
         <label for="perfil">Perfil:</label><br>
         <textarea name="perfil" rows="5" required></textarea><br><br>
 
@@ -54,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <textarea name="requisitos" rows="5" required></textarea><br><br>
 
         <label for="foto">URL de la Foto:</label><br>
-        <input type="text" name="foto" required><br><br>
+        <input type="text" name="foto"><br><br>
 
         <label for="prioridad">Prioridad:</label><br>
         <select name="prioridad" required>

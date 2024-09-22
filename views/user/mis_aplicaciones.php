@@ -88,5 +88,5 @@ ob_start();
 
 <?php
 $content = ob_get_clean();
-include 'user_layout.php'; // Asegúrate de tener un layout para el usuario
+include 'user_layout.php';
 ?>
