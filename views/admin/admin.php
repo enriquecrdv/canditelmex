@@ -5,7 +5,7 @@ if ($_SESSION['role'] != 'admin') {
     exit;
 }
 ?>
-<div class="container" style="padding-left: 30px;">
+<div class="container" style="padding-left: 60px;">
     <h1>Bienvenido, Administrador</h1>
     <p>Publica tus vacantes aqui.</p>
 
