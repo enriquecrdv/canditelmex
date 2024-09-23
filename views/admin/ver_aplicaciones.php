@@ -46,35 +46,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['aplicacion_id'])) {
     }
 
     // Subir prueba técnica al servidor
-    if (isset($_FILES['prueba_tecnica']) && $_FILES['prueba_tecnica']['error'] == UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['prueba_tecnica']['tmp_name'];
-        $fileName = $_FILES['prueba_tecnica']['name'];
-        $fileNameCmps = explode(".", $fileName);
-        $fileExtension = strtolower(end($fileNameCmps));
+    $prueba_tecnica = $_FILES['prueba_tecnica']['tmp_name'];
+    $prueba_tecnica_error = $_FILES['prueba_tecnica']['error'];
+    // Subir prueba técnica al servidor
+    if ($prueba_tecnica_error === UPLOAD_ERR_OK) {
+        $prueba_tecnica_Content = file_get_contents($prueba_tecnica);
+        
+        $sql_update_prueba = "UPDATE aplicaciones SET prueba_tecnica = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql_update_prueba);
+        $stmt->bind_param('si', $prueba_tecnica_Content, $aplicacion_id);
 
-        // Define el nuevo nombre del archivo para evitar colisiones
-        $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-
-        // Directorio donde se guardarán los archivos
-        $uploadFileDir = '../../uploads/';
-        $dest_path = $uploadFileDir . $newFileName;
-
-        // Mover el archivo a la carpeta de subidas
-        if (move_uploaded_file($fileTmpPath, $dest_path)) {
-            // Guardar la ruta del archivo en la base de datos
-            $sql_update_prueba = "UPDATE aplicaciones SET prueba_tecnica = ? WHERE id = ?";
-            $stmt = $conn->prepare($sql_update_prueba);
-            $stmt->bind_param('si', $dest_path, $aplicacion_id);
-            if ($stmt->execute()) {
-                $message = "Prueba técnica subida y guardada exitosamente.";
-            } else {
-                $message = "Error al guardar la ruta de la prueba técnica en la base de datos: " . $conn->error;
-            }
+        if ($stmt->execute()) {
+            $message = "Actualizado correctamente.";
         } else {
-            $message = "Error al mover el archivo al directorio de subidas.";
+            $message = "Error al actualizar: " . $stmt->error;
         }
-    } elseif (isset($_FILES['prueba_tecnica']) && $_FILES['prueba_tecnica']['error'] != UPLOAD_ERR_OK) {
-        $message = "Error en la carga del archivo: " . $_FILES['prueba_tecnica']['error'];
+    } else {
+        $message = "Error al cargar el archivo: " . $prueba_tecnica_error;
     }
 
     // Guardar calificación de la prueba técnica
@@ -86,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['aplicacion_id'])) {
         if ($stmt->execute()) {
             $message = "Calificación guardada exitosamente.";
         } else {
-            $message = "Error al guardar la calificación: " . $conn->error;
+            $message = "Error al actualizar: " . $conn->error;
         }
     }
 
@@ -97,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['aplicacion_id'])) {
         $stmt = $conn->prepare($sql_update_observaciones);
         $stmt->bind_param('si', $observaciones, $aplicacion_id);
         if ($stmt->execute()) {
-            $message = "Observaciones guardadas exitosamente.";
+            $message = "Actualizado correctamente.";
         } else {
             $message = "Error al guardar las observaciones: " . $conn->error;
         }
@@ -207,7 +195,12 @@ ob_start();
                 <td><?php echo htmlspecialchars($aplicacion['estado']); ?></td>
                 <td><?php echo $aplicacion['entrevista_datetime'] ? htmlspecialchars($aplicacion['entrevista_datetime']) : 'No programada'; ?>
                 </td>
-                <td><?php echo $aplicacion['prueba_tecnica'] ? '<a href="../../uploads/' . basename($aplicacion['prueba_tecnica']) . '">Ver prueba técnica</a>' : 'No subida'; ?>
+                <td>
+                    <?php if ($aplicacion['prueba_tecnica']) { ?>
+                    <a href="../../back/download_prueba.php?id=<?php echo $aplicacion['id']; ?>">Descargar Prueba tecnica</a>
+                    <?php } else { ?>
+                    No disponible
+                    <?php } ?>
                 </td>
                 <td><?php echo $aplicacion['calificacion_prueba'] !== null ? htmlspecialchars($aplicacion['calificacion_prueba']) : 'No calificada'; ?>
                 </td>
