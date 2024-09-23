@@ -10,8 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_captcha = $_POST['captcha']; // Captcha ingresado por el usuario
     $generated_captcha = $_POST['captcha_value']; // Captcha generado en el frontend
 
-    // Validar CAPTCHA en el servidor
-    if ($user_captcha === $generated_captcha) {
+    // Validar la contraseña (mínimo 3 caracteres, máximo 10, al menos una mayúscula y un número)
+    if (!preg_match('/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{3,10}$/', $password)) {
+        $message = "La contraseña debe tener entre 3 y 10 caracteres, al menos una mayúscula y un número.";
+    } elseif ($user_captcha === $generated_captcha) {
         // Verificar si el nombre de usuario ya existe
         $check_sql = "SELECT * FROM users WHERE username = ?";
         $check_stmt = $conn->prepare($check_sql);
@@ -89,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                     <div class="mb-3">
                         <label for="password">Contraseña:</label>
-                        <input type="password" name="password" required class="form-control">
+                        <input type="password" name="password" id="password" required class="form-control">
                     </div>
 
                     <div class="mb-3">
@@ -155,22 +157,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Ejecutar cuando la página esté lista
-        window.onload = function() {
-            drawCaptcha();
+        // Validar la contraseña
+        function validatePassword(password) {
+            const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{3,10}$/;
+            return regex.test(password);
         }
 
-        // Validación del CAPTCHA en el frontend antes de enviar el formulario
+        // Validar el formulario antes de enviarlo
         document.getElementById('register-form').addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
             let userCaptcha = document.getElementById('captcha_input').value;
             let correctCaptcha = document.getElementById('captcha_value').value;
 
+            // Validar contraseña
+            if (!validatePassword(password)) {
+                event.preventDefault();
+                alert("La contraseña debe tener entre 3 y 10 caracteres, al menos una mayúscula y un número.");
+                return;
+            }
+
+            // Validar CAPTCHA
             if (userCaptcha !== correctCaptcha) {
                 event.preventDefault();
                 alert("Captcha incorrecto. Intenta de nuevo.");
                 drawCaptcha();  // Regenerar CAPTCHA si falla
             }
         });
+
+        // Ejecutar cuando la página esté lista
+        window.onload = function() {
+            drawCaptcha();
+        }
     </script>
 </body>
 </html>

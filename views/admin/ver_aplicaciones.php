@@ -173,90 +173,102 @@ ob_start();
 
 
     <?php if ($result->num_rows > 0) { ?>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>CV</th>
-                    <th>Estado</th>
-                    <th>Fecha Entrevista</th>
-                    <th>Prueba Técnica</th>
-                    <th>Calificación</th>
-                    <th>Carrera</th>
-                    <th>Años de Experiencia</th>
-                    <th>Observaciones</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($aplicacion = $result->fetch_assoc()) { ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($aplicacion['nombre']); ?></td>
-                        <td><?php echo htmlspecialchars($aplicacion['email']); ?></td>
-                        <td><?php echo htmlspecialchars($aplicacion['telefono']); ?></td>
-                        <td><?php echo $aplicacion['cv'] ? '<a href="../../uploads/' . basename($aplicacion['cv']) . '">Ver CV</a>' : 'No disponible'; ?>
-                        </td>
-                        <td><?php echo htmlspecialchars($aplicacion['estado']); ?></td>
-                        <td><?php echo $aplicacion['entrevista_datetime'] ? htmlspecialchars($aplicacion['entrevista_datetime']) : 'No programada'; ?>
-                        </td>
-                        <td><?php echo $aplicacion['prueba_tecnica'] ? '<a href="../../uploads/' . basename($aplicacion['prueba_tecnica']) . '">Ver prueba técnica</a>' : 'No subida'; ?>
-                        </td>
-                        <td><?php echo $aplicacion['calificacion_prueba'] !== null ? htmlspecialchars($aplicacion['calificacion_prueba']) : 'No calificada'; ?>
-                        </td>
-                        <td><?php echo htmlspecialchars($aplicacion['carrera']); ?></td>
-                        <td><?php echo htmlspecialchars($aplicacion['anos_experiencia']); ?></td>
-                        <td><?php echo htmlspecialchars($aplicacion['observaciones']); ?></td>
-                        <td>
-                            <!-- Formulario para actualizar el estado, prueba técnica, calificación y observaciones -->
-                            <form method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="aplicacion_id" value="<?php echo $aplicacion['id']; ?>">
-                                <div class="mb-2">
-                                    <label for="estado_<?php echo $aplicacion['id']; ?>" class="form-label">Cambiar
-                                        estado:</label>
-                                    <select name="estado" id="estado_<?php echo $aplicacion['id']; ?>" class="form-select">
-                                        <option value="pendiente" <?php echo ($aplicacion['estado'] == 'pendiente') ? 'selected' : ''; ?>>Pendiente</option>
-                                        <option value="aprobada" <?php echo ($aplicacion['estado'] == 'aprobada') ? 'selected' : ''; ?>>Aprobada</option>
-                                        <option value="rechazada" <?php echo ($aplicacion['estado'] == 'rechazada') ? 'selected' : ''; ?>>Rechazada</option>
-                                    </select>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="fecha_entrevista_<?php echo $aplicacion['id']; ?>" class="form-label">Fecha de
-                                        Entrevista:</label>
-                                    <input type="datetime-local" name="fecha_entrevista"
-                                        id="fecha_entrevista_<?php echo $aplicacion['id']; ?>" class="form-control"
-                                        value="<?php echo $aplicacion['entrevista_datetime'] ? date('Y-m-d\TH:i', strtotime($aplicacion['entrevista_datetime'])) : ''; ?>">
-                                </div>
-                                <div class="mb-2">
-                                    <label for="prueba_tecnica_<?php echo $aplicacion['id']; ?>" class="form-label">Subir prueba
-                                        técnica:</label>
-                                    <input type="file" name="prueba_tecnica"
-                                        id="prueba_tecnica_<?php echo $aplicacion['id']; ?>" class="form-control">
-                                </div>
-                                <div class="mb-2">
-                                    <label for="calificacion_prueba_<?php echo $aplicacion['id']; ?>"
-                                        class="form-label">Calificación prueba técnica:</label>
-                                    <input type="number" name="calificacion_prueba"
-                                        id="calificacion_prueba_<?php echo $aplicacion['id']; ?>" class="form-control" min="0"
-                                        max="10"
-                                        value="<?php echo $aplicacion['calificacion_prueba'] !== null ? htmlspecialchars($aplicacion['calificacion_prueba']) : ''; ?>">
-                                </div>
-                                <div class="mb-2">
-                                    <label for="observaciones_<?php echo $aplicacion['id']; ?>"
-                                        class="form-label">Observaciones:</label>
-                                    <textarea name="observaciones" id="observaciones_<?php echo $aplicacion['id']; ?>"
-                                        class="form-control"><?php echo htmlspecialchars($aplicacion['observaciones']); ?></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Actualizar</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>CV</th>
+                <th>Estado</th>
+                <th>Fecha Entrevista</th>
+                <th>Prueba Técnica</th>
+                <th>Calificación</th>
+                <th>Carrera</th>
+                <th>Años de Experiencia</th>
+                <th>Observaciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($aplicacion = $result->fetch_assoc()) { ?>
+            <tr>
+                <td><?php echo htmlspecialchars($aplicacion['nombre']); ?></td>
+                <td><?php echo htmlspecialchars($aplicacion['email']); ?></td>
+                <td><?php echo htmlspecialchars($aplicacion['telefono']); ?></td>
+                <td>
+                    <?php if ($aplicacion['cv']) { ?>
+                    <a href="../../back/download_cv.php?id=<?php echo $aplicacion['id']; ?>">Descargar CV</a>
+                    <?php } else { ?>
+                    No disponible
+                    <?php } ?>
+                </td>
+                </td>
+                <td><?php echo htmlspecialchars($aplicacion['estado']); ?></td>
+                <td><?php echo $aplicacion['entrevista_datetime'] ? htmlspecialchars($aplicacion['entrevista_datetime']) : 'No programada'; ?>
+                </td>
+                <td><?php echo $aplicacion['prueba_tecnica'] ? '<a href="../../uploads/' . basename($aplicacion['prueba_tecnica']) . '">Ver prueba técnica</a>' : 'No subida'; ?>
+                </td>
+                <td><?php echo $aplicacion['calificacion_prueba'] !== null ? htmlspecialchars($aplicacion['calificacion_prueba']) : 'No calificada'; ?>
+                </td>
+                <td><?php echo htmlspecialchars($aplicacion['carrera']); ?></td>
+                <td><?php echo htmlspecialchars($aplicacion['anos_experiencia']); ?></td>
+                <td><?php echo htmlspecialchars($aplicacion['observaciones']); ?></td>
+                <td>
+                    <!-- Formulario para actualizar el estado, prueba técnica, calificación y observaciones -->
+                    <form method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="aplicacion_id" value="<?php echo $aplicacion['id']; ?>">
+                        <div class="mb-2">
+                            <label for="estado_<?php echo $aplicacion['id']; ?>" class="form-label">Cambiar
+                                estado:</label>
+                            <select name="estado" id="estado_<?php echo $aplicacion['id']; ?>" class="form-select">
+                                <option value="pendiente"
+                                    <?php echo ($aplicacion['estado'] == 'pendiente') ? 'selected' : ''; ?>>Pendiente
+                                </option>
+                                <option value="aprobada"
+                                    <?php echo ($aplicacion['estado'] == 'aprobada') ? 'selected' : ''; ?>>Aprobada
+                                </option>
+                                <option value="rechazada"
+                                    <?php echo ($aplicacion['estado'] == 'rechazada') ? 'selected' : ''; ?>>Rechazada
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="fecha_entrevista_<?php echo $aplicacion['id']; ?>" class="form-label">Fecha de
+                                Entrevista:</label>
+                            <input type="datetime-local" name="fecha_entrevista"
+                                id="fecha_entrevista_<?php echo $aplicacion['id']; ?>" class="form-control"
+                                value="<?php echo $aplicacion['entrevista_datetime'] ? date('Y-m-d\TH:i', strtotime($aplicacion['entrevista_datetime'])) : ''; ?>">
+                        </div>
+                        <div class="mb-2">
+                            <label for="prueba_tecnica_<?php echo $aplicacion['id']; ?>" class="form-label">Subir prueba
+                                técnica:</label>
+                            <input type="file" name="prueba_tecnica"
+                                id="prueba_tecnica_<?php echo $aplicacion['id']; ?>" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label for="calificacion_prueba_<?php echo $aplicacion['id']; ?>"
+                                class="form-label">Calificación prueba técnica:</label>
+                            <input type="number" name="calificacion_prueba"
+                                id="calificacion_prueba_<?php echo $aplicacion['id']; ?>" class="form-control" min="0"
+                                max="10"
+                                value="<?php echo $aplicacion['calificacion_prueba'] !== null ? htmlspecialchars($aplicacion['calificacion_prueba']) : ''; ?>">
+                        </div>
+                        <div class="mb-2">
+                            <label for="observaciones_<?php echo $aplicacion['id']; ?>"
+                                class="form-label">Observaciones:</label>
+                            <textarea name="observaciones" id="observaciones_<?php echo $aplicacion['id']; ?>"
+                                class="form-control"><?php echo htmlspecialchars($aplicacion['observaciones']); ?></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </form>
+                </td>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
     <?php } else { ?>
-        <p>No hay aplicaciones para esta vacante.</p>
+    <p>No hay aplicaciones para esta vacante.</p>
     <?php } ?>
 </div>
 
