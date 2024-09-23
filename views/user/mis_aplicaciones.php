@@ -10,11 +10,35 @@ include '../../db/db.php';
 // Obtener el ID del usuario (asumido que está almacenado en la sesión)
 $usuario_id = $_SESSION['id'];
 
+// Manejar la subida de la prueba técnica
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['aplicacion_id'])) {
+    $aplicacion_id = intval($_POST['aplicacion_id']);
+    $prueba_tecnica = $_FILES['respuesta_prueba_tecnica']['tmp_name'];
+    $prueba_tecnica_error = $_FILES['respuesta_prueba_tecnica']['error'];
+
+    // Verificar si se subió la prueba técnica
+    if ($prueba_tecnica_error === UPLOAD_ERR_OK) {
+        $prueba_tecnica_Content = file_get_contents($prueba_tecnica);
+        
+        $sql_update_prueba = "UPDATE aplicaciones SET prueba_tecnica = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql_update_prueba);
+        $stmt->bind_param('si', $prueba_tecnica_Content, $aplicacion_id);
+
+        if ($stmt->execute()) {
+            $message = "Prueba técnica actualizada correctamente.";
+        } else {
+            $message = "Error al actualizar: " . $stmt->error;
+        }
+    } else {
+        $message = "Error al cargar el archivo: " . $prueba_tecnica_error;
+    }
+}
+
 // Obtener las aplicaciones del usuario con detalles de la vacante, ordenadas por estado
 $sql = "SELECT a.*, v.nombre AS vacante_nombre, v.departamento, v.perfil, v.descripcion, v.requisitos, v.foto, v.fecha
         FROM aplicaciones a 
         JOIN vacantes v ON a.vacante_id = v.id
-        WHERE a.usuario_id = ? AND v.estado = 'abierta'  -- Filtrar vacantes con estado abierto
+        WHERE a.usuario_id = ? AND v.estado = 'abierta' 
         ORDER BY 
         CASE 
             WHEN a.estado = 'aprobada' THEN 1
@@ -33,6 +57,10 @@ ob_start();
 <div class="container">
     <h1>Mis Aplicaciones</h1>
     
+    <?php if (isset($message)) { ?>
+        <div class="alert alert-info"><?php echo htmlspecialchars($message); ?></div>
+    <?php } ?>
+
     <?php if ($result->num_rows > 0) { ?>
         <table class="table table-striped">
             <thead>
