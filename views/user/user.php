@@ -6,10 +6,10 @@ if ($_SESSION['role'] != 'user') {
 }
 ?>
 <div class="container">
-    <h1>Bienvenido, Usuario</h1>
-    <p>Busca vacantes aqui.</p>
+    <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?></h1>
+    <p>Busca vacantes aquí.</p>
     <a href="../../logout.php">Cerrar sesión</a>
-    </div>
+</div>
 <?php
 $content = ob_get_clean();
 include 'user_layout.php';
