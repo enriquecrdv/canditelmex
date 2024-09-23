@@ -13,12 +13,12 @@ $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_id = $_SESSION['id'];
-    $default_password = 'contrasena'; // Contraseña predeterminada
+    $new_password = $_POST['new_password']; // Obtener la nueva contraseña
 
     // Preparar y ejecutar la consulta para actualizar la contraseña
     $sql = "UPDATE users SET password = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('si', $default_password, $user_id);
+    $stmt->bind_param('si', $new_password, $user_id);
     
     if ($stmt->execute()) {
         $message = "Contraseña restablecida con éxito.";
@@ -58,7 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php if (!empty($message)) { echo "<div class='alert alert-info'>$message</div>"; } ?>
                 
                 <form method="POST" action="">
-                    <p>Este formulario restablecerá tu contraseña a "contrasena".</p>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">Nueva Contraseña</label>
+                        <input type="password" id="new_password" name="new_password" class="form-control" required>
+                    </div>
                     <button type="submit" class="btn btn-danger w-100">Restablecer Contraseña</button>
                 </form>
                 
