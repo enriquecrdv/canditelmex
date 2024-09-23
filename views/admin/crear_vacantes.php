@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<div class="container">
+<div class="container" style="padding-left: 30px;">
     <h1>Crear Nueva Vacante</h1>
     <form method="POST" action="">
         <label for="nombre">Nombre:</label><br>
