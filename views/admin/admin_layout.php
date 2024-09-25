@@ -49,7 +49,7 @@
     </div>
 
     <div class="main-content">
-        <div class="container">
+        <div class="container" style="padding-left: 20%;">
         <?php echo $content; ?>
         </div>
     </div>
