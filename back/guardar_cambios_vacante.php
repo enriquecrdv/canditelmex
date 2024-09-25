@@ -31,11 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
             WHERE id='$id'";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Vacante actualizada exitosamente.";
+        // echo "Vacante actualizada exitosamente.";
     } else {
         echo "Error: " . $conn->error;
     }
 }
-
 header("Location: ../views/admin/lista_vacantes.php");
 ?>
