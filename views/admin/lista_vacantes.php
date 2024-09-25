@@ -188,9 +188,10 @@ ob_start();
 
                     <!-- Botón para compartir en Twitter -->
                     <a class="btn btn-secondary btn-sm" target="_blank"
-                        href="https://twitter.com/intent/tweet?text=<?php echo urlencode('¡Mira esta vacante: ' . $vacante['nombre'] . '!'); ?>&url=<?php echo urlencode('https://tusitio.com/detalle_vacante.php?vacante_id=' . $vacante['id']); ?>">
+                        href="https://twitter.com/intent/tweet?text=<?php echo urlencode('¡Mira esta vacante: ' . $vacante['nombre'] . '!'); ?>&url=<?php echo urlencode('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>">
                         Compartir en Twitter
                     </a>
+
                     <a class="btn btn-dark btn-sm"
                         href="lista_vacantes.php?release_id=<?php echo $vacante['id']; ?>&current_type=<?php echo $vacante['tipo']; ?>">
                         <?php echo $vacante['tipo'] == 'interno' ? 'Liberar' : 'Hacer Interna'; ?>

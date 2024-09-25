@@ -37,5 +37,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id'])) {
     }
 }
 
-header("Location: ../views/lista_vacantes.php");
+header("Location: ../views/admin/lista_vacantes.php");
 ?>

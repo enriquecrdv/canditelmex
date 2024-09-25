@@ -31,7 +31,7 @@ if (isset($id)) {
 
     <?php if ($vacante_seleccionada) { ?>
     <!-- Formulario para editar los datos de la vacante -->
-    <form method="POST" action="../back/guardar_cambios_vacante.php">
+    <form method="POST" action="../../back/guardar_cambios_vacante.php">
         <input type="hidden" name="id" value="<?php echo $vacante_seleccionada['id']; ?>">
 
         <label for="nombre">Nombre:</label><br>
