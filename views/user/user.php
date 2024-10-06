@@ -5,7 +5,7 @@ if ($_SESSION['role'] != 'user') {
     exit;
 }
 ?>
-<div class="container" style="padding-left: 60px;">
+<div class="container" style="padding-left: 20%;">
     <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?></h1>
     <p>Busca vacantes aquí.</p>
     <a href="../../logout.php">Cerrar sesión</a>

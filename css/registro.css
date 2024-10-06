@@ -1,0 +1,139 @@
+/* Encapsulamos los estilos de Bootstrap */
+.bootstrap-encapsulated .form-control,
+.bootstrap-encapsulated .btn,
+.bootstrap-encapsulated .btn-primary,
+.bootstrap-encapsulated .btn-secondary {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estilo general del formulario */
+.bootstrap-encapsulated .card {
+    width: 40%;
+    margin: auto;
+    border-radius: 20px;
+    padding: 25px;
+    background-color: #f7f9fc;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bootstrap-encapsulated .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo para los encabezados */
+.bootstrap-encapsulated .card-header {
+    background-color: #2c3e50;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 15px 15px 0 0;
+}
+
+.bootstrap-encapsulated .card-header h5 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+/* Estilo para los botones */
+.bootstrap-encapsulated .btn-primary {
+    background-color: #2c3e50;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+.bootstrap-encapsulated .btn-primary:hover {
+    background-color: #1a252f;
+    transform: translateY(-3px);
+}
+
+.bootstrap-encapsulated .btn-secondary {
+    background-color: #34495e;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+.bootstrap-encapsulated .btn-secondary:hover {
+    background-color: #2c3e50;
+    transform: translateY(-3px);
+}
+
+/* Estilo para los placeholders */
+.bootstrap-encapsulated .form-control::placeholder {
+    color: rgba(150, 150, 150, 0.8);
+    font-style: italic;
+}
+
+/* Estilo de los inputs */
+.bootstrap-encapsulated .form-control {
+    border-radius: 10px;
+    border: 2px solid #bdc3c7;
+    padding: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bootstrap-encapsulated .form-control:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 8px rgba(44, 62, 80, 0.5);
+}
+
+/* Validación de campos con errores */
+.bootstrap-encapsulated .form-control:invalid {
+    border-color: #e74c3c;
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+}
+
+.bootstrap-encapsulated .form-control:valid {
+    border-color: #2ecc71;
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.5);
+}
+
+/* Estilo para el CAPTCHA */
+.bootstrap-encapsulated canvas {
+    border: 2px solid #2c3e50;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    background-color: #ecf0f1;
+}
+
+/* Alineación central */
+.bootstrap-encapsulated .center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Animaciones suaves */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bootstrap-encapsulated .card {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Mejorar la respuesta para pantallas pequeñas */
+@media (max-width: 768px) {
+    .bootstrap-encapsulated .card {
+        width: 90%;
+    }
+}

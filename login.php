@@ -43,20 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-    <style>
-        .card {
-            width: 30%;
-            margin: 0 auto;
-            border-radius: 10px; /* Añade bordes redondeados a la tarjeta */
-        }
+ 
+    <link rel="stylesheet" href="./css/login.css?v=1.0">
 
-        canvas {
-            border: 1px solid #ccc;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
+
+ 
 </head>
 <body>
     <div class="container mt-5">

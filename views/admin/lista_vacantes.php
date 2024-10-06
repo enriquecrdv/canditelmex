@@ -7,85 +7,42 @@ if ($_SESSION['role'] != 'admin') {
 
 include '../../db/db.php';
 
-// Obtener todos los departamentos únicos
+// Paginación
+$limit = 5; // Mostrar 5 vacantes por página
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$start = ($page - 1) * $limit;
+
+// Obtener todos los departamentos únicos para autocompletar
 $sql_departamentos = "SELECT DISTINCT departamento FROM vacantes";
 $result_departamentos = $conn->query($sql_departamentos);
+$departamentos = [];
 
-// Obtener el departamento seleccionado para el filtro
-$selected_departamento = isset($_GET['departamento']) ? $_GET['departamento'] : '';
-
-// Eliminar la vacante si se envía el ID para eliminación
-if (isset($_GET['delete_id'])) {
-    $delete_id = $_GET['delete_id'];
-    $sql_delete = "DELETE FROM vacantes WHERE id='$delete_id'";
-
-    if ($conn->query($sql_delete) === TRUE) {
-        $message = "Vacante eliminada exitosamente.";
-    } else {
-        $message = "Error al eliminar la vacante: " . $conn->error;
-    }
-
-    // Redirigir después de eliminar para evitar múltiples eliminaciones si se actualiza la página
-    header("Location: lista_vacantes.php");
-    exit;
+while ($row = $result_departamentos->fetch_assoc()) {
+    $departamentos[] = $row['departamento'];
 }
 
-// Cambiar el tipo de vacante (liberar vacante)
-if (isset($_GET['release_id'])) {
-    $release_id = $_GET['release_id'];
-    $current_type = $_GET['current_type'];
-    $new_type = ($current_type == 'interno') ? 'externo' : 'interno';
-    $sql_release = "UPDATE vacantes SET tipo='$new_type' WHERE id='$release_id'";
-
-    if ($conn->query($sql_release) === TRUE) {
-        $message = "Tipo de la vacante actualizado a $new_type.";
-    } else {
-        $message = "Error al cambiar el tipo de la vacante: " . $conn->error;
-    }
-
-    // Redirigir después de actualizar el tipo de vacante
-    header("Location: lista_vacantes.php");
-    exit;
-}
-
-
-// Cambiar el estado de la vacante si se envía el ID para actualización
-if (isset($_GET['update_id'])) {
-    $update_id = $_GET['update_id'];
-    $current_status = $_GET['current_status'];
-    $new_status = ($current_status == 'abierta') ? 'cerrada' : 'abierta';
-    $sql_update = "UPDATE vacantes SET estado='$new_status' WHERE id='$update_id'";
-
-    if ($conn->query($sql_update) === TRUE) {
-        $message = "Estado de la vacante actualizado a $new_status.";
-    } else {
-        $message = "Error al actualizar el estado de la vacante: " . $conn->error;
-    }
-
-    // Redirigir después de actualizar el estado para evitar múltiples actualizaciones si se actualiza la página
-    header("Location: lista_vacantes.php");
-    exit;
-}
-
-// Destacar o quitar el destaque de una vacante
+// Manejar la acción de destacar o quitar destacar
 if (isset($_GET['highlight_id'])) {
     $highlight_id = $_GET['highlight_id'];
     $current_highlight = $_GET['current_highlight'];
-    $new_highlight = ($current_highlight == '1') ? '0' : '1';
-    $sql_highlight = "UPDATE vacantes SET destacada='$new_highlight' WHERE id='$highlight_id'";
-
+    $new_highlight = ($current_highlight == '1') ? '0' : '1'; // Cambiar entre destacar y quitar destacar
+    
+    $sql_highlight = "UPDATE vacantes SET destacada = '$new_highlight' WHERE id = '$highlight_id'";
+    
     if ($conn->query($sql_highlight) === TRUE) {
-        $message = "Vacante " . ($new_highlight == '1' ? "destacada" : "no destacada") . " exitosamente.";
+        $message = ($new_highlight == '1') ? "Vacante destacada exitosamente." : "Vacante quitada de destacados.";
     } else {
-        $message = "Error al actualizar el destaque de la vacante: " . $conn->error;
+        $message = "Error al actualizar el estado de destacar: " . $conn->error;
     }
 
-    // Redirigir después de actualizar el destaque para evitar múltiples actualizaciones si se actualiza la página
+    // Redirigir para evitar que la acción se repita si se refresca la página
     header("Location: lista_vacantes.php");
     exit;
 }
 
 // Obtener vacantes filtradas
+$selected_departamento = isset($_GET['departamento']) ? $_GET['departamento'] : '';
+
 $sql = "
     SELECT 
         v.*, 
@@ -96,59 +53,70 @@ $sql = "
 ";
 
 if ($selected_departamento != '') {
-    $sql .= " WHERE v.departamento = '$selected_departamento'";
+    $sql .= " WHERE v.departamento LIKE '%$selected_departamento%'";
 }
 
-$sql .= " GROUP BY v.id ORDER BY v.destacada DESC, v.id DESC"; // Agrupar por ID de vacante
+$sql .= " GROUP BY v.id ORDER BY v.destacada DESC, v.id DESC LIMIT $start, $limit"; // Aplicar limit y offset para la paginación
 $result = $conn->query($sql);
 
+// Obtener total de vacantes para la paginación
+$sql_total = "SELECT COUNT(*) AS total FROM vacantes";
+$total_result = $conn->query($sql_total);
+$total_vacantes = $total_result->fetch_assoc()['total'];
 
 // Buffer de salida
 ob_start();
 ?>
 
-<div class="container">
-    <h1>Lista de Vacantes</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Vacantes</title>
+    
+    <!-- Enlace al archivo CSS lista_vacantes.css -->
+    <link rel="stylesheet" href="../../css/lista_vacantes.css">
+
+    <!-- Enlace a Bootstrap si no lo tienes ya -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div id="vacantes-container" class="container">
+    <h1 id="vacantes-titulo">Lista de Vacantes</h1>
 
     <!-- Filtro por Departamento -->
-    <form method="GET" class="mb-3">
+    <form method="GET" id="vacantes-filtro" class="mb-3">
         <div class="row">
             <div class="col">
-                <select name="departamento" class="form-select">
-                    <option value="">Todos los Departamentos</option>
-                    <?php while ($row = $result_departamentos->fetch_assoc()) { ?>
-                    <option value="<?php echo htmlspecialchars($row['departamento']); ?>" <?php if
-                           ($row['departamento'] == $selected_departamento)
-                               echo 'selected'; ?>>
-                        <?php echo htmlspecialchars($row['departamento']); ?>
-                    </option>
+                <!-- Campo de búsqueda con autocompletado -->
+                <input type="text" name="departamento" id="vacantes-departamento" class="form-control" placeholder="Buscar por Departamento" list="departamentos">
+                <datalist id="departamentos">
+                    <?php foreach ($departamentos as $departamento) { ?>
+                        <option value="<?php echo htmlspecialchars($departamento); ?>"></option>
                     <?php } ?>
-                </select>
+                </datalist>
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Filtrar</button>
+                <button type="submit" id="vacantes-filtrar-btn" class="btn btn-primary">Filtrar</button>
             </div>
         </div>
     </form>
 
-    <?php if (isset($message)) {
-        echo "<div class='alert alert-info'>$message</div>";
-    } ?>
-    <table class="table table-striped">
+    <!-- Mostrar mensaje si es necesario -->
+    <?php if (isset($message)) { echo "<div class='alert alert-info' id='vacantes-mensaje'>$message</div>"; } ?>
+
+    <!-- Tabla de Vacantes -->
+    <table id="vacantes-tabla" class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Departamento</th>
-                <th>Número ID</th>
                 <th>Fecha</th>
                 <th>Perfil</th>
                 <th>Descripción</th>
-                <th>Requisitos</th>
-                <th>Foto</th>
                 <th>Estado</th>
-                <th>Tipo</th>
-                <th>Seleccionados</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -158,53 +126,89 @@ ob_start();
                 <td><?php echo $vacante['id']; ?></td>
                 <td><?php echo $vacante['nombre']; ?></td>
                 <td><?php echo $vacante['departamento']; ?></td>
-                <td><?php echo $vacante['numero_id']; ?></td>
                 <td><?php echo $vacante['fecha']; ?></td>
                 <td><?php echo $vacante['perfil']; ?></td>
-                <td><?php echo $vacante['descripcion']; ?></td>
-                <td><?php echo $vacante['requisitos']; ?></td>
-                <td><img src="<?php echo $vacante['foto']; ?>" alt="Foto de la vacante" width="100"></td>
+                
+                <!-- Descripción con opción de expandir -->
+                <td>
+                    <div id="vacante-<?php echo $vacante['id']; ?>" class="description-content">
+                        <div id="vacante-short-<?php echo $vacante['id']; ?>" class="description-short">
+                            <?php echo substr($vacante['descripcion'], 0, 50); ?>... <!-- Solo muestra los primeros 50 caracteres -->
+                        </div>
+                        <div id="vacante-full-<?php echo $vacante['id']; ?>" class="description-full" style="display: none;">
+                            <?php echo $vacante['descripcion']; ?> <!-- Descripción completa oculta inicialmente -->
+                        </div>
+                        <a href="#" id="vacante-toggle-<?php echo $vacante['id']; ?>" class="description-toggle">Expandir</a>
+                    </div>
+                </td>
+
                 <td><?php echo ucfirst($vacante['estado']); ?></td>
-                <td><?php echo ucfirst($vacante['tipo']); ?></td>
+                
+                <!-- Acciones como lista desplegable -->
                 <td>
-                    <?php echo $vacante['seleccionados']; ?>/<?php echo $vacante['total_postulantes']; ?>
-                    <!-- Mostrar los seleccionados/postulantes -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="vacante-dropdown-<?php echo $vacante['id']; ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                            Acciones
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="vacante-dropdown-<?php echo $vacante['id']; ?>">
+                            <li><a class="dropdown-item" href="editar_vacantes.php?vacante_id=<?php echo $vacante['id']; ?>">Editar</a></li>
+                            <li><a class="dropdown-item" href="lista_vacantes.php?delete_id=<?php echo $vacante['id']; ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar esta vacante?');">Eliminar</a></li>
+                            <li><a class="dropdown-item" href="lista_vacantes.php?update_id=<?php echo $vacante['id']; ?>&current_status=<?php echo $vacante['estado']; ?>"><?php echo $vacante['estado'] == 'abierta' ? 'Cerrar' : 'Abrir'; ?></a></li>
+                            <li><a class="dropdown-item" href="lista_vacantes.php?highlight_id=<?php echo $vacante['id']; ?>&current_highlight=<?php echo $vacante['destacada']; ?>"><?php echo $vacante['destacada'] == '1' ? 'Quitar Destacar' : 'Destacar'; ?></a></li>
+                            <li><a class="dropdown-item" href="ver_aplicaciones.php?vacante_id=<?php echo $vacante['id']; ?>">Ver Aplicaciones</a></li>
+                        </ul>
+                    </div>
                 </td>
-                <td>
-                    <a class="btn btn-primary btn-sm"
-                        href="editar_vacantes.php?vacante_id=<?php echo $vacante['id']; ?>">Editar</a>
-                    <a class="btn btn-danger btn-sm" href="lista_vacantes.php?delete_id=<?php echo $vacante['id']; ?>"
-                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta vacante?');">Eliminar</a>
-                    <a class="btn btn-warning btn-sm"
-                        href="lista_vacantes.php?update_id=<?php echo $vacante['id']; ?>&current_status=<?php echo $vacante['estado']; ?>">
-                        <?php echo $vacante['estado'] == 'abierta' ? 'Cerrar' : 'Abrir'; ?>
-                    </a>
-                    <a class="btn btn-success btn-sm"
-                        href="lista_vacantes.php?highlight_id=<?php echo $vacante['id']; ?>&current_highlight=<?php echo $vacante['destacada']; ?>">
-                        <?php echo $vacante['destacada'] == '1' ? 'Quitar Destacar' : 'Destacar'; ?>
-                    </a>
-                    <a class="btn btn-info btn-sm"
-                        href="ver_aplicaciones.php?vacante_id=<?php echo $vacante['id']; ?>">Ver Aplicaciones</a>
-
-                    <!-- Botón para compartir en Twitter -->
-                    <a class="btn btn-secondary btn-sm" target="_blank"
-                        href="https://twitter.com/intent/tweet?text=<?php echo urlencode('¡Mira esta vacante: ' . $vacante['nombre'] . '!'); ?>&url=<?php echo urlencode('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']); ?>">
-                        Compartir en Twitter
-                    </a>
-
-                    <a class="btn btn-dark btn-sm"
-                        href="lista_vacantes.php?release_id=<?php echo $vacante['id']; ?>&current_type=<?php echo $vacante['tipo']; ?>">
-                        <?php echo $vacante['tipo'] == 'interno' ? 'Liberar' : 'Hacer Interna'; ?>
-                    </a>
-
-                </td>
-
-
             </tr>
             <?php } ?>
         </tbody>
     </table>
+
+    <!-- Paginación -->
+    <nav aria-label="Page navigation" id="vacantes-paginacion">
+        <ul class="pagination">
+            <?php for ($i = 1; $i <= ceil($total_vacantes / $limit); $i++) { ?>
+                <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
+                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                </li>
+            <?php } ?>
+        </ul>
+    </nav>
 </div>
+
+<!-- Incluir JavaScript al final del archivo -->
+<script>
+    // JavaScript para manejar la expansión de las descripciones
+    document.querySelectorAll('.description-toggle').forEach(function(button) {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const content = this.closest('.description-content');
+            const shortDescription = content.querySelector('.description-short');
+            const fullDescription = content.querySelector('.description-full');
+            const toggleButton = this;
+
+            // Verificar si está expandido o minimizado
+            if (fullDescription.style.display === 'block') {
+                // Minimizar
+                fullDescription.style.display = 'none';
+                shortDescription.style.display = 'block';
+                toggleButton.textContent = 'Expandir'; // Cambiar el texto del botón
+            } else {
+                // Expandir
+                fullDescription.style.display = 'block';
+                shortDescription.style.display = 'none';
+                toggleButton.textContent = 'Minimizar'; // Cambiar el texto del botón
+            }
+        });
+    });
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
 
 <?php
 $content = ob_get_clean();

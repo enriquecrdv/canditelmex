@@ -33,44 +33,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Restablecer Contraseña</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-    <style>
-        .card {
-            width: 40%;
-            margin: 0 auto;
-            border-radius: 10px;
-        }
-        .center-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../css/restablecer_contra.css">
 </head>
 <body>
-    <div class="center-container">
-        <div class="card">
-            <div class="card-header text-center">
-                <h5>Restablecer Contraseña</h5>
-            </div>
-            <div class="card-body">
-                <?php if (!empty($message)) { echo "<div class='alert alert-info'>$message</div>"; } ?>
-                
-                <form method="POST" action="">
-                    <div class="mb-3">
-                        <label for="new_password" class="form-label">Nueva Contraseña</label>
-                        <input type="password" id="new_password" name="new_password" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-danger w-100">Restablecer Contraseña</button>
-                </form>
-                
-                <br>
-                <a href="../index.php" class="btn btn-secondary w-100">Volver al Inicio</a>
+
+<div class="main-content bootstrap-encapsulated">
+    <div class="container">
+        <div class="center-container">
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
+                    <h5>Restablecer Contraseña</h5>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($message)) { echo "<div class='alert alert-info'>$message</div>"; } ?>
+                    
+                    <form method="POST" action="">
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label">Nueva Contraseña</label>
+                            <input type="password" id="new_password" name="new_password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">Restablecer Contraseña</button>
+                    </form>
+                    
+                    <br>
+                    <a href="../index.php" class="btn btn-secondary w-100">Volver al Inicio</a>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<!-- Encapsular Bootstrap para no interferir -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+

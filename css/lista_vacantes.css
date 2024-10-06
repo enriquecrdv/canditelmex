@@ -1,0 +1,102 @@
+#vacantes-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Ajustes para la tabla de vacantes */
+#vacantes-container .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    table-layout: fixed; /* Asegura que las celdas mantengan un tamaño fijo */
+}
+
+#vacantes-container .table td, 
+#vacantes-container .table th {
+    word-wrap: break-word; /* Asegura que el contenido de las celdas se ajuste sin destruir la tabla */
+    vertical-align: top; /* Alinea el contenido de las celdas arriba */
+}
+
+#vacantes-container .table-success {
+    background-color: #d4edda;
+}
+
+/* Estilo para el contenido de la descripción */
+#vacantes-container .description-content {
+    position: relative;
+    overflow: hidden;
+}
+
+#vacantes-container .description-short {
+    display: block;
+}
+
+#vacantes-container .description-full {
+    display: none;
+    white-space: normal; /* Asegura que el texto se expanda hacia abajo */
+}
+
+/* Estilo del botón de expandir y minimizar */
+#vacantes-container .description-toggle {
+    display: block;
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+    margin-top: 5px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.875rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    width: 100px;
+}
+
+#vacantes-container .description-toggle:hover {
+    background-color: #0056b3;
+}
+
+/* Paginación */
+#vacantes-container .pagination {
+    justify-content: center;
+}
+
+#vacantes-container .pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+#vacantes-container .pagination .page-link {
+    color: #007bff;
+    border-radius: 5px;
+}
+
+#vacantes-container .pagination .page-link:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Estilo para el botón de filtrar */
+#vacantes-container #vacantes-filtrar-btn {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+#vacantes-container #vacantes-filtrar-btn:hover {
+    background-color: #0056b3;
+}
+
+#vacantes-container #vacantes-mensaje {
+    margin-top: 10px;
+}
+
+#vacantes-container .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}

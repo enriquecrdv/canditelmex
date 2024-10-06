@@ -1,0 +1,148 @@
+/* Encapsulamos los estilos de Bootstrap */
+.bootstrap-encapsulated .btn, 
+.bootstrap-encapsulated .form-control, 
+.bootstrap-encapsulated .card, 
+.bootstrap-encapsulated .card-header, 
+.bootstrap-encapsulated .container-flex {
+    font-family: 'Arial', sans-serif;
+}
+/* Estilo general del body con un fondo atractivo */
+body {
+    background: linear-gradient(135deg, #004080, #00aaff);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    margin: 0;
+}
+
+/* Contenedor principal que incluye el formulario y la imagen */
+.container-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Espacio entre la tarjeta y la imagen */
+}
+
+/* Añade una sutil animación de aparición */
+.card {
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 40px; /* Añadir padding interno */
+}
+
+/* Animación de fadeIn */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo para la imagen PNG con fondo transparente */
+.card-image {
+    width: 300px; /* Ajustamos el tamaño de la imagen para que sea más proporcional */
+    height: auto;
+    border-radius: 10px;
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.7)); /* Sombrado alrededor de la forma */
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Botones con efecto hover */
+button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Se ajusta a todo el ancho del contenedor */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Centrar el botón correctamente */
+.card-body button {
+    display: block;
+    margin: 0 auto 10px; /* Centrado y margen inferior */
+}
+
+/* Estilo del canvas del CAPTCHA */
+#captchaCanvas {
+    border: 2px solid black;
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto 15px;
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo semi-transparente */
+    width: 100%;
+    max-width: 200px; /* Limitar el ancho máximo del captcha */
+}
+
+/* Placeholder en gris claro */
+input[type="text"]::placeholder, 
+input[type="password"]::placeholder, 
+input#captcha_input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+}
+
+/* Estilos para los inputs, incluyendo el CAPTCHA */
+input[type="text"], 
+input[type="password"], 
+input#captcha_input {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important; /* Contorno claro */
+    color: #fff !important;
+    padding: 10px !important;
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 5px !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Efecto de enfoque para los campos de texto y CAPTCHA */
+input[type="text"]:focus, 
+input[type="password"]:focus, 
+input#captcha_input:focus {
+    background-color: rgba(255, 255, 255, 0.4) !important; /* Fondo más claro al enfocarse */
+    border-color: #007bff !important; /* Cambia el color del contorno al enfocarse */
+    outline: none !important;
+}
+
+/* Estilos para los enlaces */
+a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Mejorar la respuesta para pantallas pequeñas */
+@media (max-width: 768px) {
+    .container-flex {
+        flex-direction: column;
+    }
+
+    .card, .card-image {
+        width: 90%;
+    }
+}

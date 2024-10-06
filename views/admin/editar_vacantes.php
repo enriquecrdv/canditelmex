@@ -27,49 +27,85 @@ if (isset($id)) {
 }
 ?>
 
-<div class="container">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Vacante</title>
+    <link rel="stylesheet" href="../../css/editar_vacantes.css">
+</head>
+<body>
 
+<div id="editar-vacante-container" class="bootstrap-encapsulated">
     <?php if ($vacante_seleccionada) { ?>
     <!-- Formulario para editar los datos de la vacante -->
     <form method="POST" action="../../back/guardar_cambios_vacante.php">
         <input type="hidden" name="id" value="<?php echo $vacante_seleccionada['id']; ?>">
 
-        <label for="nombre">Nombre:</label><br>
-        <input type="text" name="nombre" value="<?php echo $vacante_seleccionada['nombre']; ?>" required><br><br>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" name="nombre" value="<?php echo $vacante_seleccionada['nombre']; ?>" required>
+        </div>
 
-        <label for="departamento">Departamento:</label><br>
-        <input type="text" name="departamento" value="<?php echo $vacante_seleccionada['departamento']; ?>"
-            required><br><br>
+        <div class="mb-3">
+            <label for="departamento" class="form-label">Departamento:</label>
+            <input type="text" class="form-control" name="departamento" value="<?php echo $vacante_seleccionada['departamento']; ?>" required>
+        </div>
 
-        <label for="numero_id">Número ID:</label><br>
-        <input type="text" name="numero_id" value="<?php echo $vacante_seleccionada['numero_id']; ?>" required><br><br>
+        <div class="mb-3">
+            <label for="numero_id" class="form-label">Número ID:</label>
+            <input type="text" class="form-control" name="numero_id" value="<?php echo $vacante_seleccionada['numero_id']; ?>" required>
+        </div>
 
-        <label for="fecha">Fecha:</label><br>
-        <input type="date" name="fecha" value="<?php echo $vacante_seleccionada['fecha']; ?>" required><br><br>
+        <div class="mb-3">
+            <label for="fecha" class="form-label">Fecha:</label>
+            <input type="date" class="form-control" name="fecha" value="<?php echo $vacante_seleccionada['fecha']; ?>" required>
+        </div>
 
-        <label for="perfil">Perfil:</label><br>
-        <textarea name="perfil" rows="5" required><?php echo $vacante_seleccionada['perfil']; ?></textarea><br><br>
+        <div class="mb-3">
+            <label for="perfil" class="form-label">Perfil:</label>
+            <textarea name="perfil" class="form-control" rows="4" required><?php echo $vacante_seleccionada['perfil']; ?></textarea>
+        </div>
 
-        <label for="descripcion">Descripción:</label><br>
-        <textarea name="descripcion" rows="5"
-            required><?php echo $vacante_seleccionada['descripcion']; ?></textarea><br><br>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <textarea name="descripcion" class="form-control" rows="4" required><?php echo $vacante_seleccionada['descripcion']; ?></textarea>
+        </div>
 
-        <label for="requisitos">Requisitos:</label><br>
-        <textarea name="requisitos" rows="5"
-            required><?php echo $vacante_seleccionada['requisitos']; ?></textarea><br><br>
+        <div class="mb-3">
+            <label for="requisitos" class="form-label">Requisitos:</label>
+            <textarea name="requisitos" class="form-control" rows="4" required><?php echo $vacante_seleccionada['requisitos']; ?></textarea>
+        </div>
 
-        <label for="foto">URL de la Foto:</label><br>
-        <input type="text" name="foto" value="<?php echo $vacante_seleccionada['foto']; ?>" required><br><br>
+        <div class="mb-3">
+            <label for="foto" class="form-label">URL de la Foto:</label>
+            <input type="text" class="form-control" name="foto" value="<?php echo $vacante_seleccionada['foto']; ?>" required>
+        </div>
 
-        <input type="submit" value="Actualizar Vacante">
+        <input type="submit" value="Actualizar Vacante" class="btn btn-primary w-100">
     </form>
     <?php } else { ?>
     <p>No se encontró la vacante seleccionada.</p>
     <?php } ?>
 
-    <br>
-    <a href="lista_vacantes.php">Volver a la Lista de Vacantes</a>
+    <a href="lista_vacantes.php" class="btn btn-link">Volver a la Lista de Vacantes</a>
 </div>
+
+<!-- Bootstrap encapsulado solo para este contenedor -->
+<style>
+    .bootstrap-encapsulated .form-control,
+    .bootstrap-encapsulated .btn,
+    .bootstrap-encapsulated .btn-primary,
+    .bootstrap-encapsulated .btn-link {
+        /* Evitar interferencias de estilos globales */
+        font-family: inherit;
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</body>
+</html>
+
 <?php
 $content = ob_get_clean();
 include 'admin_layout.php';

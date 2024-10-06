@@ -1,0 +1,95 @@
+/* Estilos para el contenedor principal de la página de bienvenida */
+#welcome-container {
+    padding: 60px;
+    background-color: #f3f7fa;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 50px auto;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Estilo para el título de bienvenida */
+#welcome-title {
+    color: #2c3e50;
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* Estilo para el párrafo de bienvenida */
+#welcome-description {
+    color: #7f8c8d;
+    font-size: 1.3rem;
+    margin-bottom: 40px;
+}
+
+/* Estilo para el título de opciones de vacantes */
+#vacancy-options-title {
+    color: #2980b9;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Lista de opciones de vacantes */
+#vacancy-options-list {
+    list-style: none;
+    padding: 0;
+}
+
+#vacancy-options-list li {
+    margin-bottom: 15px;
+}
+
+#vacancy-options-list li a {
+    text-decoration: none;
+    color: #3498db;
+    font-size: 1.3rem;
+    background-color: #ecf0f1;
+    padding: 12px 25px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+/* Hover para las opciones de vacantes */
+#vacancy-options-list li a:hover {
+    background-color: #2980b9;
+    color: white;
+    transform: translateY(-3px); /* Desplazamiento sutil */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Botón de cerrar sesión */
+#logout-btn {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 12px 30px;
+    background-color: #e74c3c;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+}
+
+/* Hover para el botón de cerrar sesión */
+#logout-btn:hover {
+    background-color: #c0392b;
+    color: white;
+}
+
+/* Animación de fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
